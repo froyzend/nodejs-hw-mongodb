@@ -43,14 +43,8 @@ export const startServer = () => {
 
     // Відповідь, якщо контакт знайдено
     res.status(200).json({
-      message: 'Successfully found contact with id {contactId}!',
+      message: `Successfully found contact with id ${contactId}!`,
       data: contact,
-    });
-  });
-  /*
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello world!',
     });
   });
 
@@ -58,7 +52,7 @@ export const startServer = () => {
     res.status(404).json({
       message: 'Not found',
     });
-  });*/
+  });
 
   app.use((err, req, res, next) => {
     res.status(500).json({
