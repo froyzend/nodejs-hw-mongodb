@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+import mongoose from 'mongoose';
 import {
   getContactById,
   getAllContacts,
@@ -16,6 +17,7 @@ export const getAllContactsController = async (req, res, next) => {
       data: contacts,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -23,6 +25,9 @@ export const getAllContactsController = async (req, res, next) => {
 export const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+      throw createHttpError(400, 'Invalid contact ID');
+    }
     const contact = await getContactById(contactId);
     if (!contact) {
       throw createHttpError(404, 'Contact not found');
@@ -33,6 +38,7 @@ export const getContactByIdController = async (req, res, next) => {
       data: contact,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -46,6 +52,7 @@ export const createContactsController = async (req, res, next) => {
       data: contact,
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

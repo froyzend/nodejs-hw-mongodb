@@ -1,4 +1,5 @@
 import { ContactsCollection } from '../db/Models/contacts.js';
+import mongoose from 'mongoose';
 
 export const getAllContacts = async () => {
   try {
@@ -12,6 +13,9 @@ export const getAllContacts = async () => {
 
 export const getContactById = async (contactId) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+      throw new Error('Invalid contact ID');
+    }
     console.log('contactId', contactId);
     const contact = await ContactsCollection.findById(contactId);
     return contact;
