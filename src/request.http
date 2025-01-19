@@ -1,0 +1,15 @@
+GET http://localhost:3000/contacts
+
+GET http://localhost:3000/contacts/:6784ce21f5c6566f58396049
+
+POST  http://localhost:3000/contacts/6784ce21f5c6566f58396049
+Content-Type: application/json
+{
+    "key":"value"
+}
+
+PUT   http://localhost:3000/contacts/6784ce21f5c6566f58396049
+Content-Type: application/json
+{
+    "key":"update_value"
+}
