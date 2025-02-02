@@ -1,4 +1,4 @@
-import { UsersCollection } from '../db/models/user.js';
+import { UsersCollection } from '../db/Models/user.js';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
 import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
