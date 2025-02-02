@@ -1,9 +1,7 @@
-// src/middlewares/authenticate.js
-
 import createHttpError from 'http-errors';
 
 import { SessionsCollection } from '../db/Models/session.js';
-import { UsersCollection } from '../db/models/user.js';
+import { UsersCollection } from '../db/Models/user.js';
 
 export const authenticate = async (req, res, next) => {
   const authHeader = req.get('Authorization');
