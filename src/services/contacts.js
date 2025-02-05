@@ -54,9 +54,6 @@ export const updateContact = async (contactId, body, userId, options = {}) => {
   return await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     body,
-    {
-      ...options,
-      new: true,
-    },
+    { ...options, new: true },
   );
 };

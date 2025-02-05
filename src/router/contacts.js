@@ -19,7 +19,7 @@ router.get('/', ctrlWrapper(getAllContactsController));
 
 router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
-router.post('/contacts', ctrlWrapper(createContactsController));
+router.post('/', ctrlWrapper(createContactsController));
 router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
 
 router.put(

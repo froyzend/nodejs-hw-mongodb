@@ -90,11 +90,17 @@ export const patchContactController = async (req, res, next) => {
   if (!userId) {
     throw createHttpError(400, 'User is not authenticated');
   }
-  const result = await updateContact(
-    contactId,
-    { ...req.body, userId },
-    { new: true },
-  );
+  const result = await updateContact(contactId, req.body, userId, {
+    new: true,
+  });
+
+  if (!result) {
+    return res.status(404).json({
+      status: 404,
+      message: 'Contact not found or not updated',
+      data: null,
+    });
+  }
   res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',
