@@ -14,7 +14,7 @@ export const getAllContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
-  const userId = req.user.id;
+  const userId = req.user._id;
   const contacts = await getAllContacts({
     page,
     perPage,
@@ -32,7 +32,7 @@ export const getAllContactsController = async (req, res, next) => {
 
 export const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user.id;
+  const userId = req.user._id;
   const contact = await getContactById(contactId, userId);
   res.status(200).json({
     status: 200,
@@ -42,7 +42,7 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactsController = async (req, res, next) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   if (!userId) {
     throw createHttpError(400, 'User is not authenticated');
   }
@@ -56,7 +56,7 @@ export const createContactsController = async (req, res, next) => {
 
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user.id;
+  const userId = req.user._id;
   if (!userId) {
     throw createHttpError(400, 'User is not authenticated');
   }
@@ -70,7 +70,7 @@ export const deleteContactController = async (req, res, next) => {
 
 export const upsertContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user.id;
+  const userId = req.user._id;
   const result = await updateContact(
     contactId,
     { ...req.body, userId },
@@ -86,7 +86,7 @@ export const upsertContactController = async (req, res, next) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user.id;
+  const userId = req.user._id;
   if (!userId) {
     throw createHttpError(400, 'User is not authenticated');
   }
