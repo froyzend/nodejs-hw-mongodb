@@ -11,13 +11,11 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContactsController = async (req, res, next) => {
-  console.log('getAllContactsController called');
-  console.log('req.user:', req.user);
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
   const userId = req.user._id;
-  console.log('userId:', userId);
+
   const contacts = await getAllContacts({
     page,
     perPage,
@@ -37,6 +35,9 @@ export const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
   const contact = await getContactById(contactId, userId);
+  if (!contact) {
+    throw createHttpError(404, `Contact not found`);
+  }
   res.status(200).json({
     status: 200,
     message: `Successfully found contact with id ${contactId}!`,
@@ -46,9 +47,6 @@ export const getContactByIdController = async (req, res, next) => {
 
 export const createContactsController = async (req, res, next) => {
   const userId = req.user._id;
-  if (!userId) {
-    throw createHttpError(400, 'User is not authenticated');
-  }
   const contact = await createContact({ ...req.body, userId });
   res.status(201).json({
     status: 201,
@@ -60,10 +58,10 @@ export const createContactsController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
-  if (!userId) {
-    throw createHttpError(400, 'User is not authenticated');
+  const contact = await deleteContact(contactId, userId);
+  if (!contact) {
+    throw createHttpError(404, `Contact  not found`);
   }
-  await deleteContact(contactId, userId);
 
   res.status(200).json({
     status: 200,
@@ -71,43 +69,33 @@ export const deleteContactController = async (req, res, next) => {
   });
 };
 
-export const upsertContactController = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const userId = req.user._id;
-    console.log({ contactId, userId, body: req.body });
-    const result = await updateContact(contactId, req.body, userId, {
-      upsert: true,
-      new: true,
-    });
-    const status = result.isNew ? 201 : 200;
-    res.status(status).json({
-      status,
-      message: 'Successfully upserted a contact!',
-      data: result,
-    });
-  } catch (error) {
-    console.error(error); // Логування помилки на сервері
-    next(error); // Передача помилки в обробник помилок
+export const upsertContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const userId = req.user._id;
+  const result = await updateContact(contactId, req.body, userId, {
+    upsert: true,
+    new: true,
+  });
+  if (!result) {
+    throw createHttpError(404, `Contact not found or not updated`);
   }
+  const status = result.isNew ? 201 : 200;
+  res.status(status).json({
+    status,
+    message: 'Successfully upserted a contact!',
+    data: result,
+  });
 };
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
-  if (!userId) {
-    throw createHttpError(400, 'User is not authenticated');
-  }
   const result = await updateContact(contactId, req.body, userId, {
     new: true,
   });
 
   if (!result) {
-    return res.status(404).json({
-      status: 404,
-      message: 'Contact not found or not updated',
-      data: null,
-    });
+    throw createHttpError(404, `Contact not found or not updated`);
   }
   res.status(200).json({
     status: 200,
