@@ -11,10 +11,13 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContactsController = async (req, res, next) => {
+  console.log('getAllContactsController called');
+  console.log('req.user:', req.user);
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
   const userId = req.user._id;
+  console.log('userId:', userId);
   const contacts = await getAllContacts({
     page,
     perPage,
@@ -69,19 +72,24 @@ export const deleteContactController = async (req, res, next) => {
 };
 
 export const upsertContactController = async (req, res, next) => {
-  const { contactId } = req.params;
-  const userId = req.user._id;
-  const result = await updateContact(
-    contactId,
-    { ...req.body, userId },
-    { upsert: true, new: true },
-  );
-  const status = result.isNew ? 201 : 200;
-  res.status(status).json({
-    status,
-    message: 'Successfully upserted a contact!',
-    data: result,
-  });
+  try {
+    const { contactId } = req.params;
+    const userId = req.user._id;
+    console.log({ contactId, userId, body: req.body });
+    const result = await updateContact(contactId, req.body, userId, {
+      upsert: true,
+      new: true,
+    });
+    const status = result.isNew ? 201 : 200;
+    res.status(status).json({
+      status,
+      message: 'Successfully upserted a contact!',
+      data: result,
+    });
+  } catch (error) {
+    console.error(error); // Логування помилки на сервері
+    next(error); // Передача помилки в обробник помилок
+  }
 };
 
 export const patchContactController = async (req, res, next) => {
