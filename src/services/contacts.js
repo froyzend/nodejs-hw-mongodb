@@ -69,18 +69,16 @@ export const updateContact = async (
       {
         ...options,
         new: true,
-        runValidators: true, // Додати runValidators: true
+        runValidators: true,
       },
     );
 
     if (!result) {
-      // Якщо контакт не знайдено, повертаємо помилку 404
       throw createHttpError(404, `Contact with id ${contactId} not found`);
     }
 
     return result;
   } catch (error) {
-    // Обробляємо інші можливі помилки, наприклад, помилки валідації
     console.error('Error updating contact:', error);
     throw error;
   }
