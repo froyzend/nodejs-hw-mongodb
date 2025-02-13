@@ -20,8 +20,8 @@ paths:
   /contacts:
     get:
       $ref: ../swagger/paths/contacts/get.yaml
-      post:
-        $ref: ../swagger/paths/contacts/post.yaml
+    post:
+      $ref: ../swagger/paths/contacts/post.yaml
   /contacts/{id}:
     patch:
       $ref: ../swagger/paths/contacts/{id}/patch.yaml
