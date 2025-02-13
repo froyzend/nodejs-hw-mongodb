@@ -1,0 +1,19 @@
+tags:
+  - Contacts
+summary: Delete contact by ID
+operationId: deleteContactById
+description: Delete a specific contact by their ID.
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: The ID of the contact to delete.
+    schema:
+      type: string
+responses:
+  200:
+    description: Contact deleted successfully
+  404:
+    description: Contact not found

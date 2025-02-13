@@ -1,0 +1,21 @@
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: Create a new contact with the provided details.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+responses:
+  201:
+    description: Contact created successfully
+  400:
+    description: Invalid request body
