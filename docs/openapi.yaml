@@ -15,8 +15,9 @@ tags:
 
 servers:
   - url: https://nodejs-hw-mongodb-v2o8.onrender.com
+    description: 'Production Server'
   - url: http://localhost:3000
-
+    description: 'Local Server'
 paths:
   /contacts:
     get:
