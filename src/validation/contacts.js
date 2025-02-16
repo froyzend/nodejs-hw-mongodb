@@ -8,9 +8,8 @@ export const createContactSchema = Joi.object({
     'any.required': 'Username is required',
   }),
   email: Joi.string().email().required(),
-  phoneNumber: Joi.string().min(6).max(16).required(), // Змінено на string
+  phoneNumber: Joi.string().min(6).max(16).required(),
   contactType: Joi.string().valid('personal', 'work', 'home').required(),
-  avgMark: Joi.number().min(2).max(12).required(),
   isFavourite: Joi.boolean(),
 });
 
@@ -19,6 +18,5 @@ export const updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phoneNumber: Joi.string().min(6).max(16),
   contactType: Joi.string().valid('personal', 'work', 'home'),
-  avgMark: Joi.number().min(2).max(12),
   isFavourite: Joi.boolean(),
 });

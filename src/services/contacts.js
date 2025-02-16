@@ -69,7 +69,6 @@ export const updateContact = async (
       {
         ...options,
         new: true,
-        runValidators: true,
       },
     );
 
